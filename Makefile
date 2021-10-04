@@ -30,7 +30,6 @@ $(OUT_FILE): $(OBJ)
 
 clean:
 	rm -f $(OBJ_DIR)/*.o
-	rm -f $(BIN_DIR)/bundled.cpp
 	rm -f $(BIN_DIR)/*.exe
 
 .PHONY: all clean
