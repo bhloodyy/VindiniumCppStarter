@@ -3,19 +3,21 @@
 
 #include <chrono>
 
+#include "util/Macros.h"
+
 class Stopwatch
 {
 private:
-	std::chrono::high_resolution_clock::time_point startTime;
-	std::chrono::high_resolution_clock::time_point stopTime;
+  std::chrono::high_resolution_clock::time_point startTime;
+  std::chrono::high_resolution_clock::time_point stopTime;
 
 public:
-	Stopwatch(void);
-	~Stopwatch(void);
+  Stopwatch(void);
+  ~Stopwatch(void);
 
-	void Start(void);
-	void Stop(void);
-	int32_t GetTimestep(void);
+  void Start(void);
+  void Stop(void);
+  int32_t GetTimestep(void);
 };
 
 #endif

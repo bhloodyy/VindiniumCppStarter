@@ -5,6 +5,8 @@
 #include <algorithm>
 #include <vector>
 
+#include "util/Macros.h"
+
 class Utils
 {
 private:
@@ -13,7 +15,7 @@ private:
 
 public:
   static std::vector<std::string> SplitString(std::string text, char delimiter);
-  
+
   template<class T>
   static bool IsInVector(std::vector<T> list, T element)
   {

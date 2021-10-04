@@ -3,11 +3,17 @@
 
 #include <stdint.h>
 
+#define TIMING true
+#define DEBUG true
+#define DEBUG_INPUT false
+
 /* MISRA type conversion */
 #define BOOL(x) static_cast<bool_t>(x)
 #define UINT8(x) static_cast<uint8_t>(x)
 #define UINT16(x) static_cast<uint16_t>(x)
 #define UINT32(x) static_cast<uint32_t>(x)
+
+#define INF 2147483647
 
 #define PI 3.14159265358979
 #define toDeg 180/PI
@@ -20,19 +26,19 @@
 
 inline int fastrand()
 {
-	static unsigned int g_seed = 42;
-	g_seed = (214013 * g_seed + 2531011);
-	return (g_seed >> 16) & 0x7FFF;
+  static unsigned int g_seed = 42;
+  g_seed = (214013 * g_seed + 2531011);
+  return (g_seed >> 16) & 0x7FFF;
 }
 
 inline int rnd(int b)
 {
-	return fastrand() % b;
+  return fastrand() % b;
 }
 
 inline int rnd(int a, int b)
 {
-	return a + rnd(b - a + 1);
+  return a + rnd(b - a + 1);
 }
 
 #endif

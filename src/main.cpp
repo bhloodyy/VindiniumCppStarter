@@ -6,8 +6,7 @@
 
 #include "inc/Game.h"
 #include "inc/Stopwatch.h"
-
-#define TIMING false
+#include "util/Macros.h"
 
 int main()
 {
@@ -15,10 +14,9 @@ int main()
 
   Game game;
 
-  if(TIMING)
-  {
+  #ifdef TIMING 
     sw.Start();
-  }
+  #endif
 
   // game loop
   while (true) {
@@ -27,10 +25,12 @@ int main()
 
     game.Read();
 
-    if(TIMING && game.turn)
-    {
-      sw.Start();
-    }
+    #ifdef TIMING
+      if(game.turn)
+      {
+        sw.Start();
+      }
+    #endif
 
     // Write an action using cout. DON'T FORGET THE "<< endl"
     // To debug: cerr << "Debug messages..." << endl;
@@ -38,10 +38,9 @@ int main()
     std::cout << "WAIT" << std::endl; // WAIT | NORTH | EAST | SOUTH | WEST
     
     ++game.turn;
-    if(TIMING)
-    {
+    #ifdef TIMING
       std::cerr << sw.GetTimestep() << std::endl;
-    }
+    #endif
   }
 }
 
