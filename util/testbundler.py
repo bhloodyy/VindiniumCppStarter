@@ -23,4 +23,5 @@ def include(inputFileName):
 result = include(currentPath+"/src/main.cpp")
 
 with open(currentPath+"/bin/bundled.cpp", 'w') as outFile:
+    outFile.write("#pragma GCC optimize \"Ofast,omit-frame-pointer,inline\"\n")
     outFile.write(result)
