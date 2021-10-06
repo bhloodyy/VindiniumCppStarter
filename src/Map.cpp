@@ -58,7 +58,7 @@ void Map::Prepare(void)
   // fill graph from read input
   this->FillGraph();
 
-  // adjust graph with floyd warshell ~ 15 ms
+  // adjust graph with floyd warshell ~ 50 ms
   this->FloydWarshall();
 
   #ifdef DEBUG

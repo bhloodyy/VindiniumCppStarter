@@ -14,6 +14,7 @@ public:
   std::string type;
   int id;
   Vec2i pos;
+  Vec2i spawn;
   int life;
   int gold;
   int numMines;

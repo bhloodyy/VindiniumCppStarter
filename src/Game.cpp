@@ -45,6 +45,7 @@ void Game::Read(void)
     {
       if(this->turn == 0)
       {
+        entity.spawn = entity.pos;
         this->players.push_back(entity);
       }
       else
@@ -118,9 +119,8 @@ Entity* Game::GetClosestTavern(std::vector<Entity>& vec, Entity* player)
       for(auto dir : this->map.directions)
       {
         Vec2i curPos = e.pos + dir.second;
-
-        if(!this->map.IsWall(curPos) &&
-           this->map.IsInside(curPos))
+        if( this->map.IsInside(curPos) &&
+            this->map.IsAccessible(curPos))
         {
           int currDist = this->map.GetShortestDistance(this->players[player->id].pos, curPos);
 
@@ -149,8 +149,8 @@ Entity* Game::GetClosestMine(std::unordered_map<Vec2i, Entity>& map, Entity* pla
       {
         Vec2i curPos = p.second.pos + dir.second;
 
-        if(!this->map.IsWall(curPos) &&
-           this->map.IsInside(curPos))
+        if( this->map.IsInside(curPos) &&
+            this->map.IsAccessible(curPos))
         {
           int currDist = this->map.GetShortestDistance(this->players[player->id].pos, curPos);
 
