@@ -3,9 +3,10 @@
 
 #include <stdint.h>
 
-#define TIMING true
+#define TIMING false
 #define DEBUG true
 #define DEBUG_INPUT false
+#define DEBUG_OUT true
 
 /* MISRA type conversion */
 #define BOOL(x) static_cast<bool_t>(x)

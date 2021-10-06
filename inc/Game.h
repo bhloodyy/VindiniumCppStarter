@@ -9,8 +9,6 @@
 #include "inc/Map.h"
 #include "util/Macros.h"
 
-#define MAX_PLAYERS 4
-
 class Game
 {
 private:
@@ -19,14 +17,17 @@ public:
   /* init values */
   int turn = 0;
   int myID;
-  Entity players[MAX_PLAYERS];
-  std::vector<Entity> mines;
-  Map* map;
+  std::vector<Entity> players;
+  Map map;
 
   Game(void);
   ~Game(void);
 
   void Read(void);
+  Entity* GetClosestEnemy(std::vector<Entity>& vec, Entity* player);
+  Entity* GetClosestTavern(std::vector<Entity>& vec, Entity* player);
+  Entity* GetClosestMine(std::unordered_map<Vec2i, Entity>& map, Entity* player);
+  Entity* GetEnemyMostMines(void);
 };
 
 #endif /* GAME_H */

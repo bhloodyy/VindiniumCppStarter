@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <math.h>
+#include <functional>
 
 #include "util/Macros.h"
 
@@ -47,11 +48,25 @@ using Vec2f = Vec2<float>;
 using Vec2i = Vec2<int>;
 template<class T> std::istream &operator >> (std::istream &is, Vec2<T> &v) { return is >> v.x >> v.y; };
 template<class T> std::ostream &operator << (std::ostream &os, const Vec2<T> &v) { return os << v.x << " " << v.y; };
+/* cantor pairing function */
+template<class T>  bool operator < (const Vec2<T> &v, const Vec2<T> &w) { return (1/2*(v.x + v.y)*(v.x + v.y + 1) + v.y) < (1/2*(w.x + w.y)*(w.x + w.y + 1) + w.y); }
 
 inline bool isClockwise(Vec2f a, Vec2f b) { return a.normalize().cross(b.normalize()) <= 0; }
 inline float getCosAngle(Vec2f a, Vec2f b) { return a.normalize().dot(b.normalize()); }
 inline float getAngle(Vec2f a, Vec2f b) { return acos(getCosAngle(a, b))*toDeg; }
 inline float getSignedAngle(Vec2f a, Vec2f b) { return acos(cgclamp(getCosAngle(a, b), -1, 1))*(isClockwise(a, b) ? -1 : 1) * toDeg; }
 inline float getAbsoluteAngle(Vec2f vec) { return acos(vec.normalize().dot(Vec2f(1, 0)))*sign(vec.y) * toDeg; }
+
+namespace std
+{
+  template <class T>
+  class hash<Vec2<T>>
+  {
+  public:
+    size_t operator()(const Vec2<T> &v) const{
+      return (hash<T>{}(v.x)^(hash<T>{}(v.y) << 1)); 
+    }
+  };
+}
 
 #endif

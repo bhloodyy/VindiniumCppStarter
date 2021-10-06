@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <string>
-#include <map>
+#include <unordered_map>
 
 #include "inc/Vec2.h"
 #include "inc/Entity.h"
@@ -26,11 +26,10 @@ public:
   int size;
   std::vector<std::string> grid;
   std::vector<Entity> taverns;
-  int numMines;
-  //vector<vector<int>> graph;
+  std::unordered_map<Vec2i, Entity> mines;
   int graph[MAX_SIZE*MAX_SIZE][MAX_SIZE*MAX_SIZE];
 
-  std::map<std::string, Vec2i> directions =
+  std::unordered_map<std::string, Vec2i> directions =
   {
     { WEST, Vec2i(-1, 0) },
     //{ NORTHWEST, Vec2i(-1, -1) },
@@ -46,9 +45,11 @@ public:
   ~Map(void);
 
   void Read(void);
+  void Prepare(void);
   void PrintGraph(void);
   bool IsInside(const Vec2i &pos);
   bool IsWall(const Vec2i &pos);
+  bool IsAccessible(const Vec2i &pos);
   std::vector<Vec2i> GetNeighbours(Vec2i* const &v);
   const int GetStraightDistance(const Vec2i &start, const Vec2i &end);
   const int GetManhattenDistance(const Vec2i &start, const Vec2i &end);

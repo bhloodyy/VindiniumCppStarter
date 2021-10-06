@@ -7,15 +7,35 @@
 
 Map::Map(void)
 {
-  this->numMines = 0;
+}
 
+Map::~Map(void)
+{
+}
+
+void Map::Read(void)
+{
   std::cin >> this->size; std::cin.ignore();
-  for (int i = 0; i < this->size; i++)
+  #ifdef DEBUG_INPUT
+    if(DEBUG_INPUT)
+    {
+      std::cerr << this->size << std::endl;
+    }
+  #endif
+
+  for (int i = 0; i < this->size; ++i)
   {
     std::string line;
     getline(std::cin, line);
+    #ifdef DEBUG_INPUT
+      if(DEBUG_INPUT)
+      {
+        std::cerr << line << std::endl;
+      }
+    #endif
+
+    this->grid.push_back(line);
     
-    grid.push_back(line);
     for (int j = 0; j < line.length(); ++j)
     {
       if (line[j] == 'T')
@@ -31,7 +51,10 @@ Map::Map(void)
       }
     }
   }
+}
 
+void Map::Prepare(void)
+{
   // fill graph from read input
   this->FillGraph();
 
@@ -39,12 +62,11 @@ Map::Map(void)
   this->FloydWarshall();
 
   #ifdef DEBUG
-    this->PrintGraph();
+    if(DEBUG)
+    {
+      this->PrintGraph();
+    }
   #endif
-}
-
-Map::~Map(void)
-{
 }
 
 void Map::FillGraph(void)
@@ -55,7 +77,7 @@ void Map::FillGraph(void)
     for (int x = 0; x < this->size; ++x)
     {
       //look for neighbours only if cell is not a wall
-      if (!this->IsWall(Vec2i(x, y)))
+      if (this->IsAccessible(Vec2i(x, y)))
       {
         Vec2i curPos = Vec2i(x, y);
         for (auto const &dir : this->directions)
@@ -63,7 +85,7 @@ void Map::FillGraph(void)
           if (this->IsInside(curPos + dir.second))
           {
             // if neighbour is no wall save cost in graph
-            if (this->grid[(curPos + dir.second).y][(curPos + dir.second).x] != '#')
+            if(this->IsAccessible(curPos + dir.second))
             {
               this->graph[x + y * this->size][(curPos + dir.second).x + (curPos + dir.second).y * this->size] = 1;
               this->graph[(curPos + dir.second).x + (curPos + dir.second).y * this->size][x + y * this->size] = 1;
@@ -125,7 +147,7 @@ void Map::PrintGraph(void)
 {
   for (int i = 0; i < this->size*this->size; ++i)
   {
-    if (i == this->size / 2 - 1)
+    if (i == 4)
     {
       for (int j = 0; j < this->size*this->size; ++j)
       {
@@ -152,7 +174,14 @@ bool Map::IsInside(const Vec2i &pos)
 
 bool Map::IsWall(const Vec2i &pos)
 {
-  return this->grid[pos.y][pos.x] == '#';;
+  return this->grid[pos.y][pos.x] == '#';
+}
+
+bool Map::IsAccessible(const Vec2i &pos)
+{
+  return (!(this->grid[pos.y][pos.x] == '#') &&
+          !(this->grid[pos.y][pos.x] == 'T') &&
+          !(this->grid[pos.y][pos.x] == 'M'));
 }
 
 std::vector<Vec2i> Map::GetNeighbours(Vec2i* const &v)

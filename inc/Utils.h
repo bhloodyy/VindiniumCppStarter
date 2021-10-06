@@ -17,9 +17,23 @@ public:
   static std::vector<std::string> SplitString(std::string text, char delimiter);
 
   template<class T>
-  static bool IsInVector(std::vector<T> list, T element)
+  static bool IsInVector(std::vector<T>& list, T element)
   {
     return (std::find(list.begin(), list.end(), element) != list.end());
+  }
+
+  template<class T>
+  static T* GetElementPtr(std::vector<T>& list, T element)
+  {
+    auto it = std::find(list.begin(), list.end(), element);
+    if(it != list.end())
+    {
+      return &(*it);
+    }
+    else
+    {
+      return nullptr;
+    }
   }
 };
 

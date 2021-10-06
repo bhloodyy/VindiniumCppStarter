@@ -11,11 +11,14 @@
 int main()
 {
   Stopwatch sw;
-
   Game game;
+  Vec2i lastTarget;
 
-  #ifdef TIMING 
-    sw.Start();
+  #ifdef TIMING
+    if(TIMING)
+    {
+      sw.Start();
+    }
   #endif
 
   // game loop
@@ -26,7 +29,7 @@ int main()
     game.Read();
 
     #ifdef TIMING
-      if(game.turn)
+      if(TIMING && game.turn)
       {
         sw.Start();
       }
@@ -34,12 +37,48 @@ int main()
 
     // Write an action using cout. DON'T FORGET THE "<< endl"
     // To debug: cerr << "Debug messages..." << endl;
+    Vec2i target = Vec2i();
+    Entity* me = &game.players[game.myID];
+    Entity* mostMinesEnemy = game.GetEnemyMostMines();
+    Entity* closestEnemy = game.GetClosestEnemy(game.players, me);
+    Entity* closestMine = game.GetClosestMine(game.map.mines, me);
+    Entity* closestTavern = game.GetClosestTavern(game.map.taverns, me);
+
+    #ifdef DEBUG_OUT
+      if(DEBUG_OUT)
+      {
+        if(mostMinesEnemy != nullptr)
+        {
+          std::cerr << "mostMinesEnemy: " << *mostMinesEnemy << std::endl;
+        }
+        if(closestEnemy != nullptr)
+        {
+        std::cerr << "closestEnemy: " << *closestEnemy << std::endl;
+        }
+        if(closestMine != nullptr)
+        {
+        std::cerr << "closestMine: " << *closestMine << std::endl;
+        }
+        if(closestTavern != nullptr)
+        {
+        std::cerr << "closestTavern: " << *closestTavern << std::endl;
+        }
+      }
+    #endif
+
+    // Write an action using cout. DON'T FORGET THE "<< endl"
+    // To debug: cerr << "Debug messages..." << endl;
 
     std::cout << "WAIT" << std::endl; // WAIT | NORTH | EAST | SOUTH | WEST
+
+    lastTarget = target;
     
     ++game.turn;
     #ifdef TIMING
-      std::cerr << sw.GetTimestep() << std::endl;
+      if(TIMING)
+      {
+        std::cerr << sw.GetTimestep() << std::endl;
+      }
     #endif
   }
 }
