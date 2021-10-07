@@ -11,7 +11,7 @@
       "program": "${workspaceFolder}/bin/out.exe",
       "args": ["<", "${workspaceFolder}/res/in.txt"],
       "stopAtEntry": false,
-      "cwd": "${workspaceFolder}",
+      "cwd": "${workspaceFolder}/bin",
       "environment": [{"name":"MALLOC_CHECK_ ", "value":"2"}],
       "externalConsole": false,
       "MIMode": "gdb",

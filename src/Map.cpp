@@ -187,7 +187,7 @@ bool Map::IsAccessible(const Vec2i &pos)
 std::vector<Vec2i> Map::GetNeighbours(Vec2i* const &v)
 {
   std::vector<Vec2i> neighbours;
-  for (auto dir : this->directions)
+  for (auto const &dir : this->directions)
   {
     Vec2i neighbour = *v + dir.second;
     if (this->IsInside(neighbour))
@@ -229,6 +229,32 @@ const int Map::GetShortestDistance(const Vec2i &start, const Vec2i &end)
 {
   if (this->IsInside(start) && this->IsInside(end))
   {
+    if(!this->IsAccessible(end))
+    {
+      int shortestDist = INF;
+      for(auto const &dir : this->directions)
+      {
+        Vec2i curPos = end + dir.second;
+        if( this->IsInside(curPos) &&
+            this->IsAccessible(curPos))
+        {
+          int currDist = this->GetShortestDistance(start, curPos);
+
+          if(currDist < shortestDist)
+          {
+            shortestDist = currDist;
+          }
+        }
+      }
+      if(shortestDist == INF)
+      {
+        return shortestDist;
+      }
+      else
+      {
+        return shortestDist + 1;
+      }
+    }
     return this->graph[start.x + start.y * this->size][end.x + end.y * this->size];
   }
   else
@@ -237,29 +263,27 @@ const int Map::GetShortestDistance(const Vec2i &start, const Vec2i &end)
   }
 }
 
-std::pair<std::string, Vec2i> Map::GetNextCell(const Vec2i &start, const Vec2i &end)
+Vec2i Map::GetNextCell(const Vec2i &start, const Vec2i &end)
 {
   int shortestDist = INF;
-  std::pair<std::string, Vec2i> shortestDir;
+  Vec2i nextCell = start;
   for (auto const &dir : this->directions)
   {
-    if (shortestDir.second == Vec2i())
+    Vec2i curPos = start + dir.second;
+    if (curPos == end)
     {
-      shortestDir = dir;
+      return curPos;
     }
-    else
+    if(this->IsAccessible(curPos))
     {
-      if (start + dir.second == end)
-      {
-        return dir;
-      }
-      int curDist = this->GetShortestDistance(start + dir.second, end);
+      int curDist = this->GetShortestDistance(curPos, end);
+      std::cerr << curPos << " " << curDist << " " << nextCell << " " << shortestDist << std::endl;
       if (curDist < shortestDist)
       {
         shortestDist = curDist;
-        shortestDir = dir;
+        nextCell = curPos;
       }
     }
   }
-  return shortestDir;
+  return nextCell;
 }

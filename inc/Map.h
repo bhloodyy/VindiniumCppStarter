@@ -54,7 +54,7 @@ public:
   const int GetStraightDistance(const Vec2i &start, const Vec2i &end);
   const int GetManhattenDistance(const Vec2i &start, const Vec2i &end);
   const int GetShortestDistance(const Vec2i &start, const Vec2i &end);
-  std::pair<std::string, Vec2i> GetNextCell(const Vec2i &start, const Vec2i &end);
+  Vec2i GetNextCell(const Vec2i &start, const Vec2i &end);
 };
 
 #endif /* MAP_H */
