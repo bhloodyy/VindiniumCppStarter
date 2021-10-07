@@ -277,7 +277,6 @@ Vec2i Map::GetNextCell(const Vec2i &start, const Vec2i &end)
     if(this->IsAccessible(curPos))
     {
       int curDist = this->GetShortestDistance(curPos, end);
-      std::cerr << curPos << " " << curDist << " " << nextCell << " " << shortestDist << std::endl;
       if (curDist < shortestDist)
       {
         shortestDist = curDist;
