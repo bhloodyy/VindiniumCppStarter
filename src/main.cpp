@@ -75,6 +75,7 @@ int main()
     #ifdef TIMING
       if(TIMING)
       {
+        std::cerr << "Time taken : " << sw.GetTimestep() << " microseconds" << std::endl;
       }
     #endif
   }

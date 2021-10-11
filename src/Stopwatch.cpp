@@ -25,5 +25,5 @@ void Stopwatch::Stop(void)
 int32_t Stopwatch::GetTimestep(void)
 {
   this->Stop();
-  return std::chrono::duration_cast<std::chrono::milliseconds>(this->stopTime - this->startTime).count();
+  return std::chrono::duration_cast<std::chrono::microseconds>(this->stopTime - this->startTime).count();
 }
