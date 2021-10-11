@@ -47,8 +47,12 @@ public:
   void Read(void);
   void Prepare(void);
   void PrintGraph(void);
+  void UpdateMap(std::vector<Entity>& players);
   bool IsInside(const Vec2i &pos);
   bool IsWall(const Vec2i &pos);
+  bool IsMine(const Vec2i &pos);
+  bool IsTavern(const Vec2i &pos);
+  bool IsPlayer(const Vec2i &pos);
   bool IsAccessible(const Vec2i &pos);
   std::vector<Vec2i> GetNeighbours(Vec2i* const &v);
   const int GetStraightDistance(const Vec2i &start, const Vec2i &end);

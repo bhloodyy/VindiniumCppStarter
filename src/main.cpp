@@ -12,7 +12,6 @@ int main()
 {
   Stopwatch sw;
   Game game;
-  Vec2i lastTarget;
 
   #ifdef TIMING
     if(TIMING)
@@ -71,13 +70,11 @@ int main()
 
     std::cout << "WAIT" << std::endl; // WAIT | NORTH | EAST | SOUTH | WEST
 
-    lastTarget = target;
     
     ++game.turn;
     #ifdef TIMING
       if(TIMING)
       {
-        std::cerr << sw.GetTimestep() << std::endl;
       }
     #endif
   }

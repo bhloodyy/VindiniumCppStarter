@@ -60,13 +60,15 @@ void Game::Read(void)
       {
         this->map.mines.insert(std::pair<Vec2i, Entity>(entity.pos, entity));
       }
+      this->map.mines[entity.pos] = entity;
       if(entity.id != -1)
       {
-        this->map.mines[entity.pos] = entity;
         this->players[entity.id].numMines += 1;
       }
     }
   }
+
+  this->map.UpdateMap(this->players);
 
   #ifdef DEBUG
     if(DEBUG)
@@ -114,23 +116,11 @@ Entity* Game::GetClosestTavern(std::vector<Entity>& vec, Entity* player)
   Entity* closest = nullptr;
   for(auto e : vec)
   {
-    if(e.id != player->id)
+    int currDist = this->map.GetShortestDistance(this->players[player->id].pos, e.pos);
+    if(currDist < shortestDist)
     {
-      for(auto dir : this->map.directions)
-      {
-        Vec2i curPos = e.pos + dir.second;
-        if( this->map.IsInside(curPos) &&
-            this->map.IsAccessible(curPos))
-        {
-          int currDist = this->map.GetShortestDistance(this->players[player->id].pos, curPos);
-
-          if(currDist < shortestDist)
-          {
-            shortestDist = currDist;
-            closest = Utils::GetElementPtr(vec, e);
-          }
-        }
-      }
+      shortestDist = currDist;
+      closest = Utils::GetElementPtr(vec, e);
     }
   }
 
@@ -186,4 +176,31 @@ Entity* Game::GetEnemyMostMines(void)
   }
 
   return most;
+}
+
+std::vector<Vec2i> Game::GetClostestAdjacentCells(Entity* player, Vec2i target)
+{
+  int shortestDist = INF;
+  std::vector<Vec2i> closestVec;
+  for(auto const &dir : this->map.directions)
+  {
+    Vec2i curPos = player->pos + dir.second;
+    if( this->map.IsInside(curPos) &&
+        this->map.IsAccessible(curPos))
+    {
+      int dist = this->map.GetShortestDistance(curPos, target);
+      if(dist < shortestDist)
+      {
+        closestVec.clear();
+        closestVec.push_back(curPos);
+        shortestDist = dist;
+      }
+      else if(dist == shortestDist)
+      {
+        closestVec.push_back(curPos);
+      }
+    }
+  }
+
+  return closestVec;
 }

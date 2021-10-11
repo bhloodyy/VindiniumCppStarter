@@ -28,6 +28,7 @@ public:
   Entity* GetClosestTavern(std::vector<Entity>& vec, Entity* player);
   Entity* GetClosestMine(std::unordered_map<Vec2i, Entity>& map, Entity* player);
   Entity* GetEnemyMostMines(void);
+  std::vector<Vec2i> GetClostestAdjacentCells(Entity* player, Vec2i target);
 };
 
 #endif /* GAME_H */

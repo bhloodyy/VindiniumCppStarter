@@ -77,7 +77,9 @@ void Map::FillGraph(void)
     for (int x = 0; x < this->size; ++x)
     {
       //look for neighbours only if cell is not a wall
-      if (this->IsAccessible(Vec2i(x, y)))
+      if (!this->IsWall(Vec2i(x, y)) &&
+          !this->IsTavern(Vec2i(x, y)) &&
+          !this->IsMine(Vec2i(x, y)))
       {
         Vec2i curPos = Vec2i(x, y);
         for (auto const &dir : this->directions)
@@ -85,7 +87,9 @@ void Map::FillGraph(void)
           if (this->IsInside(curPos + dir.second))
           {
             // if neighbour is no wall save cost in graph
-            if(this->IsAccessible(curPos + dir.second))
+            if(!this->IsWall(curPos + dir.second) &&
+            !this->IsTavern(curPos + dir.second) &&
+            !this->IsMine(curPos + dir.second))
             {
               this->graph[x + y * this->size][(curPos + dir.second).x + (curPos + dir.second).y * this->size] = 1;
               this->graph[(curPos + dir.second).x + (curPos + dir.second).y * this->size][x + y * this->size] = 1;
@@ -167,6 +171,25 @@ void Map::PrintGraph(void)
   }
 }
 
+void Map::UpdateMap(std::vector<Entity>& players)
+{
+  for (int y = 0; y < this->size; ++y)
+  {
+    for (int x = 0; x < this->size; ++x)
+    {
+      if (this->IsPlayer(Vec2i(x, y)))
+      {
+        this->grid[y][x] = '.';
+      }
+    }
+  }
+
+  for(auto player : players)
+  {
+    this->grid[player.pos.y][player.pos.x] = player.id;
+  }
+}
+
 bool Map::IsInside(const Vec2i &pos)
 {
   return pos.x >= 0 && pos.x < this->size && pos.y >= 0 && pos.y < this->size;
@@ -177,11 +200,33 @@ bool Map::IsWall(const Vec2i &pos)
   return this->grid[pos.y][pos.x] == '#';
 }
 
+bool Map::IsMine(const Vec2i &pos)
+{
+  return this->grid[pos.y][pos.x] == 'M';
+}
+
+bool Map::IsTavern(const Vec2i &pos)
+{
+  return this->grid[pos.y][pos.x] == 'T';
+}
+
+bool Map::IsPlayer(const Vec2i &pos)
+{
+  return ((this->grid[pos.y][pos.x] == '0') ||
+          (this->grid[pos.y][pos.x] == '1') ||
+          (this->grid[pos.y][pos.x] == '2') ||
+          (this->grid[pos.y][pos.x] == '3'));
+}
+
 bool Map::IsAccessible(const Vec2i &pos)
 {
   return (!(this->grid[pos.y][pos.x] == '#') &&
           !(this->grid[pos.y][pos.x] == 'T') &&
-          !(this->grid[pos.y][pos.x] == 'M'));
+          !(this->grid[pos.y][pos.x] == 'M') &&
+          !(this->grid[pos.y][pos.x] == '0') &&
+          !(this->grid[pos.y][pos.x] == '1') &&
+          !(this->grid[pos.y][pos.x] == '2') &&
+          !(this->grid[pos.y][pos.x] == '3'));
 }
 
 std::vector<Vec2i> Map::GetNeighbours(Vec2i* const &v)
@@ -229,6 +274,10 @@ const int Map::GetShortestDistance(const Vec2i &start, const Vec2i &end)
 {
   if (this->IsInside(start) && this->IsInside(end))
   {
+    if(start == end)
+    {
+      return 0;
+    }
     if(!this->IsAccessible(end))
     {
       int shortestDist = INF;
