@@ -42,4 +42,9 @@ inline int rnd(int a, int b)
   return a + rnd(b - a + 1);
 }
 
+constexpr inline int CantorPairing(int a, int b)
+{
+  return (((a + b)*(a + b + 1)) / 2 + b);
+}
+
 #endif

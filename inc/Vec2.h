@@ -49,7 +49,7 @@ using Vec2i = Vec2<int>;
 template<class T> std::istream &operator >> (std::istream &is, Vec2<T> &v) { return is >> v.x >> v.y; };
 template<class T> std::ostream &operator << (std::ostream &os, const Vec2<T> &v) { return os << v.x << " " << v.y; };
 /* cantor pairing function */
-template<class T>  bool operator < (const Vec2<T> &v, const Vec2<T> &w) { return (1/2*(v.x + v.y)*(v.x + v.y + 1) + v.y) < (1/2*(w.x + w.y)*(w.x + w.y + 1) + w.y); }
+template<class T>  bool operator < (const Vec2<T> &v, const Vec2<T> &w) { return (CantorPairing(v.x, v.y) < CantorPairing(w.x, w.y)); }
 
 inline bool isClockwise(Vec2f a, Vec2f b) { return a.normalize().cross(b.normalize()) <= 0; }
 inline float getCosAngle(Vec2f a, Vec2f b) { return a.normalize().dot(b.normalize()); }

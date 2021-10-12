@@ -27,7 +27,7 @@ public:
   std::vector<std::string> grid;
   std::vector<Entity> taverns;
   std::unordered_map<Vec2i, Entity> mines;
-  int graph[MAX_SIZE*MAX_SIZE][MAX_SIZE*MAX_SIZE];
+  int graph[CantorPairing(MAX_SIZE, MAX_SIZE)][CantorPairing(MAX_SIZE, MAX_SIZE)];
 
   std::unordered_map<std::string, Vec2i> directions =
   {
@@ -46,7 +46,7 @@ public:
 
   void Read(void);
   void Prepare(void);
-  void PrintGraph(void);
+  void PrintGraph(Vec2i pos);
   void UpdateMap(std::vector<Entity>& players);
   bool IsInside(const Vec2i &pos);
   bool IsWall(const Vec2i &pos);
