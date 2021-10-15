@@ -45,6 +45,7 @@ public:
   ~Map(void);
 
   void Read(void);
+  void ClearGraph(void);
   void Prepare(void);
   void PrintGraph(Vec2i pos);
   void UpdateMap(std::vector<Entity>& players);

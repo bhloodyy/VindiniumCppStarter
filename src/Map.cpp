@@ -54,8 +54,22 @@ void Map::Read(void)
   }
 }
 
+void Map::ClearGraph(void)
+{
+  for (int i = 0; i < this->size * this->size; ++i)
+  {
+    for (int j = 0; j < this->size * this->size; ++j)
+    {
+      this->graph[i][j] = 0;
+    }
+  }
+}
+
 void Map::Prepare(void)
 {
+  // Clear array
+  this->ClearGraph();
+
   // fill graph from read input
   this->FillGraph();
 
@@ -65,7 +79,7 @@ void Map::Prepare(void)
   #ifdef DEBUG
     if(DEBUG)
     {
-      this->PrintGraph(Vec2i(this->size-1,this->size-1));
+      this->PrintGraph(Vec2i(18,22));
     }
   #endif
 }
@@ -77,12 +91,12 @@ void Map::FillGraph(void)
   {
     for (int x = 0; x < this->size; ++x)
     {
+      Vec2i curPos = Vec2i(x, y);
       //look for neighbours only if cell is not a wall
-      if (!this->IsWall(Vec2i(x, y)) &&
-          !this->IsTavern(Vec2i(x, y)) &&
-          !this->IsMine(Vec2i(x, y)))
+      if (!this->IsWall(curPos) &&
+          !this->IsTavern(curPos) &&
+          !this->IsMine(curPos))
       {
-        Vec2i curPos = Vec2i(x, y);
         for (auto const &dir : this->directions)
         {
           if (this->IsInside(curPos + dir.second))
