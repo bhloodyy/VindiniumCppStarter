@@ -24,6 +24,7 @@ public:
   ~Game(void);
 
   void Read(void);
+  void CalcPlayerSpawn(void);
   Entity* GetClosestEnemy(std::vector<Entity>& vec, Entity* player);
   Entity* GetClosestTavern(std::vector<Entity>& vec, Entity* player);
   Entity* GetClosestMine(std::unordered_map<Vec2i, Entity>& map, Entity* player);

@@ -27,7 +27,7 @@ public:
   std::vector<std::string> grid;
   std::vector<Entity> taverns;
   std::unordered_map<Vec2i, Entity> mines;
-  int graph[CantorPairing(MAX_SIZE, MAX_SIZE)][CantorPairing(MAX_SIZE, MAX_SIZE)];
+  int graph[MAX_SIZE * MAX_SIZE][MAX_SIZE * MAX_SIZE];
 
   std::unordered_map<std::string, Vec2i> directions =
   {

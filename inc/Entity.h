@@ -23,7 +23,7 @@ public:
   void operator = (const Entity &e) { this->type = e.type; this->id = e.id; this->pos = e.pos; this->life = e.life; this->gold = e.gold; };
   friend std::ostream &operator << (std::ostream &os, const Entity &e)
   {
-    return os << "Type: " << e.type << ", Id: " << e.id << ", X: " << e.pos.x << ", Y: " << e.pos.y << ", Life: " << e.life << ", Gold: " << e.gold << ", numMines: " << e.numMines;
+    return os << "Type: " << e.type << ", Id: " << e.id << ", pos: " << e.pos << ", spawn: " << e.spawn << ", Life: " << e.life << ", Gold: " << e.gold << ", numMines: " << e.numMines;
   };
   void Read()
   {

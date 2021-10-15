@@ -4,6 +4,7 @@
 #include <sstream>
 
 #include "inc/Utils.h"
+#include "inc/Stopwatch.h"
 
 Map::Map(void)
 {
@@ -91,23 +92,23 @@ void Map::FillGraph(void)
             !this->IsTavern(curPos + dir.second) &&
             !this->IsMine(curPos + dir.second))
             {
-              this->graph[CantorPairing(x, y)][CantorPairing((curPos + dir.second).x, (curPos + dir.second).y)] = 1;
-              this->graph[CantorPairing((curPos + dir.second).x, (curPos + dir.second).y)][CantorPairing(x, y)] = 1;
+              this->graph[x + y * this->size][(curPos + dir.second).x + (curPos + dir.second).y * this->size] = 1;
+              this->graph[(curPos + dir.second).x + (curPos + dir.second).y * this->size][x + y * this->size] = 1;
             }
           }
         }
       }
       else
       {
-        this->graph[CantorPairing(x, y)][CantorPairing(x, y)] = INF;
+        this->graph[x + y * this->size][x + y * this->size] = INF;
       }
     }
   }
 
   // fill empty costs in graph
-  for (int i = 0; i < CantorPairing(this->size, this->size); ++i)
+  for (int i = 0; i < this->size * this->size; ++i)
   {
-    for (int j = 0; j < CantorPairing(this->size, this->size); ++j)
+    for (int j = 0; j < this->size * this->size; ++j)
     {
       if (this->graph[i][j] != 1)
       {
@@ -127,14 +128,14 @@ void Map::FillGraph(void)
 void Map::FloydWarshall(void)
 {
   // calculate shortest distances from one to another
-  for (int k = 0; k < CantorPairing(this->size, this->size); k++)
+  for (int k = 0; k < this->size * this->size; k++)
   {
     // Pick all vertices as source one by one 
-    for (int i = 0; i < CantorPairing(this->size, this->size); i++)
+    for (int i = 0; i < this->size * this->size; i++)
     {
       // Pick all vertices as destination for the 
       // above picked source 
-      for (int j = 0; j < CantorPairing(this->size, this->size); j++)
+      for (int j = 0; j < this->size * this->size; j++)
       {
         // If vertex k is on the shortest path from 
         // i to j, then update the value of graph[i][j] 
@@ -153,13 +154,13 @@ void Map::PrintGraph(Vec2i pos)
   {
     for (int j = 0; j < this->size; ++j)
     {
-      if (this->graph[CantorPairing(pos.x, pos.y)][CantorPairing(j, i)] == INF)
+      if (this->graph[pos.x + pos.y * this->size][j + i * this->size] == INF)
       {
         std::cerr << "INF\t";
       }
       else
       {
-        std::cerr << this->graph[CantorPairing(pos.x, pos.y)][CantorPairing(j, i)] << "\t";
+        std::cerr << this->graph[pos.x + pos.y * this->size][j + i * this->size] << "\t";
       }
     }
     std::cerr << std::endl;
@@ -299,7 +300,7 @@ const int Map::GetShortestDistance(const Vec2i &start, const Vec2i &end)
         return shortestDist + 1;
       }
     }
-    return this->graph[CantorPairing(start.x, start.y)][CantorPairing(end.x, end.y)];
+    return this->graph[start.x + start.y * this->size][end.x + end.y * this->size];
   }
   else
   {

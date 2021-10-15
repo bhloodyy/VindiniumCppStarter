@@ -3,6 +3,7 @@
 #include <iostream>
 #include <sstream>
 #include <map>
+#include <cmath>
 
 #include "inc/Utils.h"
 
@@ -45,7 +46,6 @@ void Game::Read(void)
     {
       if(this->turn == 0)
       {
-        entity.spawn = entity.pos;
         this->players.push_back(entity);
       }
       else
@@ -68,6 +68,11 @@ void Game::Read(void)
     }
   }
 
+  if(this->turn == 0)
+  {
+    this->CalcPlayerSpawn();
+  }
+
   this->map.UpdateMap(this->players);
 
   #ifdef DEBUG
@@ -87,6 +92,43 @@ void Game::Read(void)
       }
     }
   #endif
+}
+
+void Game::CalcPlayerSpawn(void)
+{
+  int x1, y1, x2, y2;
+  int myX = this->players[this->myID].pos.x;
+  int myY = this->players[this->myID].pos.y;
+
+  int otherX = this->map.size - 1 - myX;
+  int otherY = this->map.size - 1 - myY;
+
+  if(myX < otherX)
+  {
+    x1 = myX;
+    x2 = otherX;
+  }
+  else
+  {
+    x1 = otherX;
+    x2 = myX;
+  }
+  if(myY < otherY)
+  {
+    y1 = myY;
+    y2 = otherY;
+  }
+  else
+  {
+    y1 = otherY;
+    y2 = myY;
+  }
+
+  for (Entity& p : this->players)
+  {
+    p.spawn.x = (int)(round((float)(p.pos.x - x1)/(x2 - x1))) * (x2 - x1) + x1;
+    p.spawn.y = (int)(round((float)(p.pos.y - y1)/(y2 - y1))) * (y2 - y1) + y1;
+  }
 }
 
 Entity* Game::GetClosestEnemy(std::vector<Entity>& vec, Entity* player)
